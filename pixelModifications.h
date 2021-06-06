@@ -19,7 +19,11 @@ void levelHistogram(cv::Mat3b& hsvMat);
 
 void levelHistogramRgb(cv::Mat3b& mat);
 
+void levelHistogramGray(cv::Mat1b& mat);
+
 void changeContrast(cv::Mat3b& mat, double coefficient);
+
+void changeContrast(cv::Mat1b& mat, double coefficient);
 
 
 #endif //PROB_PIXELMODIFICATIONS_H

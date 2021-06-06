@@ -173,27 +173,13 @@ bool isPixelInToleranceGrey(const uchar originalPix, const uchar newPix, const u
 }
 
 std::vector<SegmentationResult>
-getSegmentsStartingWithGivenColorGrey(const cv::Mat3b &mat, const UcharPair &hueRange, const UcharPair &saturationRange,
-                                      const UcharPair &valueRange, const uchar tolerance, const IntPair &minSize) {
-    cv::Mat3b hsvMat;
-    cv::cvtColor(mat, hsvMat, cv::COLOR_BGR2HSV);
-    std::set<IntPair> pixelsToStartWith;
-    for(int i = 0; i < hsvMat.rows; ++i) {
-        for(int j = 0; j < hsvMat.cols; ++j) {
-            if(hsvMat(i, j)[0] >= hueRange.first && hsvMat(i, j)[0] <= hueRange.second &&
-               hsvMat(i, j)[1] >= saturationRange.first && hsvMat(i, j)[1] <= saturationRange.second &&
-               hsvMat(i, j)[2] >= valueRange.first && hsvMat(i, j)[2] <= saturationRange.second) {
-                pixelsToStartWith.insert({i, j});
-            }
-        }
-    }
-    cv::Mat1b greyMat;
-    cv::cvtColor(mat, greyMat, cv::COLOR_BGR2GRAY);
+getSegmentsStartingWithSeedsGrey(const cv::Mat1b &greyMat, std::set<IntPair> seeds, const uchar tolerance,
+                                 const IntPair &minSize) {
     std::set<IntPair> usedPixels;
     std::vector<SegmentationResult> result;
-    while(!pixelsToStartWith.empty()) {
-        IntPair startPixel = *pixelsToStartWith.begin();
-        pixelsToStartWith.erase(startPixel);
+    while(!seeds.empty()) {
+        IntPair startPixel = *seeds.begin();
+        seeds.erase(startPixel);
         if(usedPixels.find(startPixel) != usedPixels.end()) {
             continue;
         }

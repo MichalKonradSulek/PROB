@@ -95,6 +95,30 @@ void levelHistogramRgb(cv::Mat3b &mat) {
     }
 }
 
+void levelHistogramGray(cv::Mat1b &mat) {
+    if(mat.empty()) return;
+    unsigned i = 1;
+    std::map<unsigned, unsigned> nOfPixels;
+    for(const auto& pixel : mat) {
+        ++nOfPixels[pixel];
+    }
+    if(nOfPixels.size() <= 1) {
+        return;
+    }
+    unsigned d0 = (*nOfPixels.begin()).second;
+    unsigned sum = 0;
+    std::map<unsigned, double> lut;
+    for(const auto& item : nOfPixels) {
+        sum += item.second;
+        unsigned targetValue = (sum - d0) * 255 / (mat.total() - d0);
+        lut[item.first] = (double) targetValue / item.first;
+    }
+    for(auto& pixel : mat) {
+        double coefficient = lut[pixel];
+        pixel = uchar(coefficient * pixel);
+    }
+}
+
 void changeContrast(cv::Mat3b &mat, double coefficient) {
     const uchar HALF_MAX = 127;
     for(auto& pixel : mat) {
@@ -103,5 +127,14 @@ void changeContrast(cv::Mat3b &mat, double coefficient) {
             value = value < 0 ? 0 : (value > 255 ? 255 : value);
             pixel[i] = value; // NOLINT(cppcoreguidelines-narrowing-conversions)
         }
+    }
+}
+
+void changeContrast(cv::Mat1b &mat, double coefficient) {
+    const uchar HALF_MAX = 127;
+    for(auto& pixel : mat) {
+        double value = coefficient * (pixel - HALF_MAX) + HALF_MAX;
+        value = value < 0 ? 0 : (value > 255 ? 255 : value);
+        pixel = value; // NOLINT(cppcoreguidelines-narrowing-conversions)
     }
 }

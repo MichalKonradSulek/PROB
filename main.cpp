@@ -8,6 +8,7 @@
 
 #include "pixelModifications.h"
 #include "segmentation.h"
+#include "kernelModifications.h"
 
 namespace fs = std::filesystem;
 
@@ -29,7 +30,7 @@ int main() {
 //                                              {5, 15, 10},
 //                                              {10,10});
 ////    std::vector<SegmentationResult> segmentationResult =
-////            getSegmentsStartingWithGivenColorGrey(hsv_mat, {100, 130}, {60, 255}, {60, 170},
+////            getSegmentsStartingWithSeedsGrey(hsv_mat, {100, 130}, {60, 255}, {60, 170},
 ////                                              5,
 ////                                              {10,10});
 //    for(const auto& item : segmentationResult) {
@@ -68,20 +69,50 @@ int main() {
     for(const auto& file : files) {
         cv::Mat mat = cv::imread(file);
         cv::Mat3b editableMat = mat;
-        cv::namedWindow("Window1");
-        cv::imshow("Window1", mat);
+//        cv::namedWindow("Window1");
+//        cv::imshow("Window1", mat);
 //        changeContrast(editableMat, 1.5);
 //        mat = getOnlyPixelsWithGivenValues(editableMat, {95, 145}, {50, 255}, {20, 190});
         cv::Mat3b hsvMat;
         cv::cvtColor(mat, hsvMat, cv::COLOR_BGR2HSV);
         std::set<IntPair> seeds = getSegmentationSeedsHsv(hsvMat,{100, 127},
                                                           {163, 204}, {45, 153});
+        cv::Mat3b matWithSeeds = mat.clone();
         for(const auto& seed : seeds) {
-            editableMat(seed.first, seed.second) = {255, 0 , 255};
+            matWithSeeds(seed.first, seed.second) = {255, 0 , 255};
         }
-        cv::namedWindow("Window2");
-        cv::imshow("Window2", editableMat);
-        cv::waitKey(-1);
+//        cv::namedWindow("Window2");
+//        cv::imshow("Window2", matWithSeeds);
+
+        cv::Mat1b grayMap;
+        cv::cvtColor(mat, grayMap, cv::COLOR_BGR2GRAY);
+//        cv::namedWindow("Window3");
+//        cv::imshow("Window3", grayMap);
+
+//        grayMap = maxFilter(grayMap, 3, MedianValue());
+//        cv::namedWindow("Window3i");
+//        cv::imshow("Window3i", grayMap);
+
+//        levelHistogramGray(grayMap);
+//        cv::namedWindow("Window3a");
+//        cv::imshow("Window3a", grayMap);
+
+//        grayMap = maxFilter(grayMap, 3, MinPixelValue());
+        changeContrast(grayMap, 2);
+        cv::namedWindow("Window3b");
+        cv::imshow("Window3b", grayMap);
+//        cv::waitKey(-1);
+
+        std::vector<SegmentationResult> segments = getSegmentsStartingWithSeedsGrey(grayMap, seeds, 10, {18, 18});
+        for(const auto& segment : segments) {
+            cv::namedWindow("Window4");
+            cv::imshow("Window4", segment.object);
+            cv::waitKey(-1);
+        }
+
+
+
+
     }
     return 0;
 

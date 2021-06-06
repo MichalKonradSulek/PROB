@@ -9,7 +9,8 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 set(SOURCES
         main.cpp
         pixelModifications.cpp
-        segmentation.cpp typedefs.h)
+        segmentation.cpp
+        kernelModifications.cpp)
 
 add_executable(prob ${SOURCES})
 

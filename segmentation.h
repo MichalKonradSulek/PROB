@@ -27,8 +27,7 @@ getSegmentsStartingWithGivenColor(const cv::Mat3b &hsv_mat, const UcharPair &hue
                                   const IntPair &minSize = {1, 1});
 
 std::vector<SegmentationResult>
-getSegmentsStartingWithGivenColorGrey(const cv::Mat3b &mat, const UcharPair &hueRange, const UcharPair &saturationRange,
-                                      const UcharPair &valueRange, uchar tolerance, const IntPair &minSize);
-
+getSegmentsStartingWithSeedsGrey(const cv::Mat1b &greyMat, std::set<IntPair> seeds,
+                                 uchar tolerance, const IntPair &minSize = {1, 1});
 
 #endif //PROB_SEGMENTATION_H
