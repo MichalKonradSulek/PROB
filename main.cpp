@@ -9,6 +9,7 @@
 #include "pixelModifications.h"
 #include "segmentation.h"
 #include "kernelModifications.h"
+#include "coefficientCalculation.h"
 
 namespace fs = std::filesystem;
 
@@ -107,6 +108,10 @@ int main() {
         for(const auto& segment : segments) {
             cv::namedWindow("Window4");
             cv::imshow("Window4", segment.object);
+            ImageMoments imageMoments = calculateImageMoments(segment.object);
+            double m1 = calculateM1(imageMoments);
+            double m7 = calculateM7(imageMoments);
+            std::cout << "m1: " << m1 << "\tm7: " << m7 << std::endl;
             cv::waitKey(-1);
         }
 

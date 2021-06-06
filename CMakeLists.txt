@@ -10,7 +10,7 @@ set(SOURCES
         main.cpp
         pixelModifications.cpp
         segmentation.cpp
-        kernelModifications.cpp)
+        kernelModifications.cpp coefficientCalculation.cpp coefficientCalculation.h)
 
 add_executable(prob ${SOURCES})
 
