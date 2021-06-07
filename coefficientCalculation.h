@@ -22,4 +22,6 @@ double calculateM1(const ImageMoments& moments);
 
 double calculateM7(const ImageMoments& moments);
 
+uchar getAverageLuminosity(const cv::Mat1b& mat);
+
 #endif //PROB_COEFFICIENTCALCULATION_H

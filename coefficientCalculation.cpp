@@ -31,3 +31,11 @@ double calculateM7(const ImageMoments &moments) {
     const double M20 = moments.m20 - pow(moments.m10, 2) / moments.m00;
     return (M20 * M02 - pow(M11, 2)) / pow(moments.m00, 4);
 }
+
+uchar getAverageLuminosity(const cv::Mat1b &mat) {
+    unsigned long sum = 0;
+    for(const auto& pixel : mat) {
+        sum += pixel;
+    }
+    return sum / mat.total();
+}

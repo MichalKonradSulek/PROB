@@ -138,3 +138,11 @@ void changeContrast(cv::Mat1b &mat, double coefficient) {
         pixel = value; // NOLINT(cppcoreguidelines-narrowing-conversions)
     }
 }
+
+void changeBrightness(cv::Mat1b &mat, int coefficient) {
+    for(auto& pixel : mat) {
+        int value = (int)pixel + coefficient;
+        value = value < 0 ? 0 : (value > 255 ? 255 : value);
+        pixel = value; // NOLINT(cppcoreguidelines-narrowing-conversions)
+    }
+}

@@ -25,5 +25,7 @@ void changeContrast(cv::Mat3b& mat, double coefficient);
 
 void changeContrast(cv::Mat1b& mat, double coefficient);
 
+void changeBrightness(cv::Mat1b &mat, int coefficient);
+
 
 #endif //PROB_PIXELMODIFICATIONS_H
