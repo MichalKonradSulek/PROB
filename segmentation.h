@@ -22,17 +22,6 @@ std::set<IntPair> getSegmentationSeedsHsv(const cv::Mat3b &hsvMat, const UcharPa
 std::set<IntPair> getSegmentationSeedsBgr(const cv::Mat3b &rgbMat, const UcharPair &bRange, const UcharPair &gRange,
                                           const UcharPair &rRange);
 
-std::vector<SegmentationResult> getSegments(const cv::Mat1d& mat, int minWidth=0, int minHeight=0);
-
-std::vector<SegmentationResult>
-getSegmentsStartingWithGivenColor(const cv::Mat3b &hsv_mat, const UcharPair &hueRange, const UcharPair &saturationRange,
-                                  const UcharPair &valueRange, const cv::Vec3b &tolerance = {5, 5, 5},
-                                  const IntPair &minSize = {1, 1});
-
-std::vector<SegmentationResult>
-getSegmentsStartingWithSeedsGrey(const cv::Mat1b &greyMat, std::set<IntPair> seeds,
-                                 uchar tolerance, const IntPair &minSize = {1, 1});
-
 std::vector<SegmentationResult>
 getSegments8DirGrey(const cv::Mat1b &greyMat, std::set<IntPair> seeds, uchar tolerance,
                     const IntPair &minSize);

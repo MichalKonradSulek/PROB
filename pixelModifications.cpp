@@ -8,8 +8,6 @@
 #include "pixelModifications.h"
 #include "typedefs.h"
 
-#include <iostream>
-
 
 cv::Mat3b filterPixelsWithGivenValues(const cv::Mat3b& mat, const UcharPair& hueRange, const UcharPair& saturationRange,
                                       const UcharPair& valueRange) {
