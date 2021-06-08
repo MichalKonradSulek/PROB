@@ -25,7 +25,7 @@ class MedianValue : public KernelFilter {
     uchar operator()(const cv::Mat1b& area) const override;
 };
 
-cv::Mat1b maxFilter(const cv::Mat1b& mat, int kernelSize, const KernelFilter& kernelFilter);
+cv::Mat1b kernelFilter(const cv::Mat1b& mat, int kernelSize, const KernelFilter& kernelFilter);
 
 
 #endif //PROB_KERNELMODIFICATIONS_H

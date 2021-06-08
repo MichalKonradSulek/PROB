@@ -78,8 +78,8 @@ int main() {
 //                                                          {0, 85}, {0, 65});
         cv::Mat3b hsvMat;
         cv::cvtColor(mat, hsvMat, cv::COLOR_BGR2HSV);
-        std::set<IntPair> seeds = getSegmentationSeedsHsv(hsvMat,{100, 138},
-                                                          {99, 204}, {45, 153});
+        std::set<IntPair> seeds = getSegmentationSeedsHsv(hsvMat,{100, 127},
+                                                          {150, 204}, {45, 153});
 
 //        cv::Mat3b matWithSeeds = mat.clone();
 //        for(const auto& seed : seeds) {
@@ -91,33 +91,35 @@ int main() {
 
         cv::Mat1b grayMap;
         cv::cvtColor(mat, grayMap, cv::COLOR_BGR2GRAY);
+        grayMap = kernelFilter(grayMap, 3, MinPixelValue());
         uchar avgLuminosity = getAverageLuminosity(grayMap);
         std::cout << "avgLum: " << +avgLuminosity << std::endl;
         changeBrightness(grayMap, 127 - avgLuminosity);
-        cv::namedWindow("Window3");
-        cv::imshow("Window3", grayMap);
+//        cv::namedWindow("Window3");
+//        cv::imshow("Window3", grayMap);
 
-//        grayMap = maxFilter(grayMap, 3, MinPixelValue());
-        changeContrast(grayMap, 2);
+        changeContrast(grayMap, 3);
         cv::namedWindow("Window3b");
         cv::imshow("Window3b", grayMap);
-        cv::waitKey(-1);
+//        cv::waitKey(-1);
 
-//        std::vector<SegmentationResult> segments = getSegments8DirGrey2(grayMap, seeds, 15, {10, 10});
-//        for(const auto& segment : segments) {
+        cv::Mat3b matWithRoi = mat.clone();
+        std::vector<SegmentationResult> segments = getSegments8DirGrey2(grayMap, seeds, 10, {18, 18});
+        for(const auto& segment : segments) {
 //            cv::namedWindow("Window4");
 //            cv::imshow("Window4", segment.object);
-//            ImageMoments imageMoments = calculateImageMoments(segment.object);
-//            double m1 = calculateM1(imageMoments);
-//            double m7 = calculateM7(imageMoments);
-//            std::cout << "m1: " << m1 << "\tm7: " << m7 << std::endl;
-//            cv::Mat3b matWithRoi;
-//            cv::cvtColor(grayMap, matWithRoi, cv::COLOR_GRAY2BGR);
-//            cv::rectangle(matWithRoi, segment.roi, {0,255,0});
-//            cv::namedWindow("Window5");
-//            cv::imshow("Window5", matWithRoi);
 //            cv::waitKey(-1);
-//        }
+            ImageMoments imageMoments = calculateImageMoments(segment.object);
+            double m1 = calculateM1(imageMoments);
+            double m7 = calculateM7(imageMoments);
+            if(m1 > 0.35 && m1 < 0.68 && m7 > 0.029 && m7 < 0.084) {
+                cv::rectangle(matWithRoi, segment.roi, {255,0,255}, 2);
+            }
+            std::cout << "m1: " << m1 << "\tm7: " << m7 << std::endl;
+        }
+        cv::namedWindow("Window5");
+        cv::imshow("Window5", matWithRoi);
+        cv::waitKey(-1);
     }
     return 0;
 

@@ -49,7 +49,7 @@ cv::Vec3b getPixelWithGivenRank(const cv::Mat_<cv::Vec3b>& area, const unsigned 
 
 
 
-cv::Mat1b maxFilter(const cv::Mat1b &mat, int kernelSize, const KernelFilter& kernelFilter) {
+cv::Mat1b kernelFilter(const cv::Mat1b &mat, int kernelSize, const KernelFilter& kernelFilter) {
     CV_Assert(kernelSize % 2 == 1 && kernelSize > 0);
     const int kernelHalfSize = kernelSize / 2;
     cv::Mat1b result = cv::Mat1b(mat.rows, mat.cols);
